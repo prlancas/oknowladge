@@ -1,6 +1,6 @@
 package info.ephyra.nlp.semantics;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.nlp.NETagger;
 import info.ephyra.questionanalysis.Term;
 import info.ephyra.util.RegexConverter;
@@ -108,16 +108,16 @@ public class Predicate implements Comparable<Predicate>, Serializable {
 		// extract verb
 		Matcher verbM = VERB_P.matcher(annotated);
 		if (!verbM.find()) {
-			MsgPrinter.printErrorMsg("Problem building predicate: " + "TARGET missing.");
-			MsgPrinter.printErrorMsg("Sentence: " + sentence);
-			MsgPrinter.printErrorMsg("Annotation: " + annotated);
+			LegasyErrorReporter.errorMsg("Problem building predicate: " + "TARGET missing.");
+			LegasyErrorReporter.errorMsg("Sentence: " + sentence);
+			LegasyErrorReporter.errorMsg("Annotation: " + annotated);
 			throw new ParseException("Predicate annotation could not be parsed.", 0);
 		}
 		verb = ASSERT.untokenize(verbM.group(1).trim(), sentence);
 		if (verb == null) {
-			MsgPrinter.printErrorMsg("Problem building predicate: " + "TARGET not in original sentence.");
-			MsgPrinter.printErrorMsg("Sentence: " + sentence);
-			MsgPrinter.printErrorMsg("Annotation: " + annotated);
+			LegasyErrorReporter.errorMsg("Problem building predicate: " + "TARGET not in original sentence.");
+			LegasyErrorReporter.errorMsg("Sentence: " + sentence);
+			LegasyErrorReporter.errorMsg("Annotation: " + annotated);
 			throw new ParseException("Predicate annotation could not be parsed.", 0);
 		}
 		
@@ -130,9 +130,9 @@ public class Predicate implements Comparable<Predicate>, Serializable {
 			String role = argM.group(1).toUpperCase();
 			String arg = ASSERT.untokenize(argM.group(2).trim(), sentence);
 			if (arg == null) {
-				MsgPrinter.printErrorMsg("Problem building predicate: " + role + " not in original sentence.");
-				MsgPrinter.printErrorMsg("Sentence: " + sentence);
-				MsgPrinter.printErrorMsg("Annotation: " + annotated);
+				LegasyErrorReporter.errorMsg("Problem building predicate: " + role + " not in original sentence.");
+				LegasyErrorReporter.errorMsg("Sentence: " + sentence);
+				LegasyErrorReporter.errorMsg("Annotation: " + annotated);
 			} else {
 				rolesL.add(role);
 				argsL.add(arg);
@@ -145,9 +145,9 @@ public class Predicate implements Comparable<Predicate>, Serializable {
 			String role = modM.group(1).toUpperCase();
 			String arg = ASSERT.untokenize(modM.group(2).trim(), sentence);
 			if (arg == null) {
-				MsgPrinter.printErrorMsg("Problem building predicate: " + role + " not in original sentence.");
-				MsgPrinter.printErrorMsg("Sentence: " + sentence);
-				MsgPrinter.printErrorMsg("Annotation: " + annotated);
+				LegasyErrorReporter.errorMsg("Problem building predicate: " + role + " not in original sentence.");
+				LegasyErrorReporter.errorMsg("Sentence: " + sentence);
+				LegasyErrorReporter.errorMsg("Annotation: " + annotated);
 			} else {
 				rolesL.add(role);
 				argsL.add(arg);

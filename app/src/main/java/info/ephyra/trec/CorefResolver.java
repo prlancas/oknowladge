@@ -1,6 +1,6 @@
 package info.ephyra.trec;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.nlp.OpenNLP;
 import info.ephyra.nlp.SnowballStemmer;
 import info.ephyra.nlp.StanfordParser;
@@ -355,7 +355,7 @@ public class CorefResolver {
 		}
 
 		questions[next].setQuestionString(currentQuestionString);
-		MsgPrinter.printResolvedQuestion(currentQuestionString);
+		LegasyErrorReporter.printResolvedQuestion(currentQuestionString);
 	}
 
 	private static String isTargetPerson(String currentTarget) {
@@ -603,7 +603,7 @@ public class CorefResolver {
 		// System.out.println(next+ "Replaced:" +
 		// questions[next].getQuestionString());
 		// System.out.println("#########################################################");
-		MsgPrinter.printResolvedQuestion(questions[next].getQuestionString());
+		LegasyErrorReporter.printResolvedQuestion(questions[next].getQuestionString());
 	}
 
 	/**
@@ -620,7 +620,7 @@ public class CorefResolver {
 		temp.add(question);		
 
 		questionsArray[next].setQuestionString(temp.get(0));
-		MsgPrinter.printResolvedQuestion(question);
+		LegasyErrorReporter.printResolvedQuestion(question);
 	}
 	
 	/**

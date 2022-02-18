@@ -1,6 +1,6 @@
 package info.ephyra.answerselection.filters;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.search.Result;
 
 import java.io.EOFException;
@@ -91,8 +91,8 @@ public class DeserializationFilter extends Filter {
 				
 				ois.close();
 			} catch (Exception e) {
-				MsgPrinter.printErrorMsg("Could not read serialized results:");
-				MsgPrinter.printErrorMsg(e.toString());
+				LegasyErrorReporter.errorMsg("Could not read serialized results:");
+				LegasyErrorReporter.errorMsg(e.toString());
 				System.exit(1);
 			}
 		}

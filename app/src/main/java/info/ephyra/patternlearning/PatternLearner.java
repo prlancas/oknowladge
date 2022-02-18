@@ -1,7 +1,7 @@
 package info.ephyra.patternlearning;
 
 import info.ephyra.answerselection.filters.AnswerPatternFilter;
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.nlp.NETagger;
 import info.ephyra.nlp.OpenNLP;
 import info.ephyra.nlp.SnowballStemmer;
@@ -113,7 +113,7 @@ public class PatternLearner {
 		
 		for (int i = 0; i < qss.length; i++) {
 			// print original question string
-			MsgPrinter.printQuestionString(qss[i]);
+			LegasyErrorReporter.printQuestionString(qss[i]);
 			
 			// normalize question
 			String qn = QuestionNormalizer.normalize(qss[i]);
@@ -121,12 +121,12 @@ public class PatternLearner {
 			String stemmed = QuestionNormalizer.stemVerbsAndNouns(qn);
 			
 			// print normalized and stemmed question string
-			MsgPrinter.printNormalization(stemmed);
+			LegasyErrorReporter.printNormalization(stemmed);
 			
 			// interpret question
 			QuestionInterpretation[] qis =
 				QuestionInterpreter.interpret(qn, stemmed);
-			MsgPrinter.printInterpretations(qis);
+			LegasyErrorReporter.printInterpretations(qis);
 			
 			for (QuestionInterpretation qi : qis) 
 				if (!saveInterpretation(dir, qi, ass.get(qss[i]),
@@ -314,40 +314,40 @@ public class PatternLearner {
 	 * Initializes the pattern learning tool.
 	 */
 	public static void init() {
-		MsgPrinter.printInitializing();
+		LegasyErrorReporter.initialising();
 		
 		// create tokenizer
-		MsgPrinter.printStatusMsg("Creating tokenizer...");
+		LegasyErrorReporter.statusMsg("Creating tokenizer...");
 		if (!OpenNLP.createTokenizer("res/nlp/tokenizer/opennlp/" +
 									 "EnglishTok.bin.gz"))
-			MsgPrinter.printErrorMsg("Could not create tokenizer.");
+			LegasyErrorReporter.errorMsg("Could not create tokenizer.");
 //		LingPipe.createTokenizer();
 		
 		// create sentence detector
-		MsgPrinter.printStatusMsg("Creating sentence detector...");
+		LegasyErrorReporter.statusMsg("Creating sentence detector...");
 		if (!OpenNLP.createSentenceDetector("res/nlp/sentencedetector/" +
 											"opennlp/EnglishSD.bin.gz"))
-			MsgPrinter.printErrorMsg("Could not create sentence detector.");
+			LegasyErrorReporter.errorMsg("Could not create sentence detector.");
 //		LingPipe.createSentenceDetector();
 		
 		// create stemmer
-		MsgPrinter.printStatusMsg("Creating stemmer...");
+		LegasyErrorReporter.statusMsg("Creating stemmer...");
 		SnowballStemmer.create();
 		
 		// create part of speech tagger
-		MsgPrinter.printStatusMsg("Creating POS tagger...");
+		LegasyErrorReporter.statusMsg("Creating POS tagger...");
 		if (!OpenNLP.createPosTagger("res/nlp/postagger/opennlp/tag.bin.gz",
 									 "res/nlp/postagger/opennlp/tagdict"))
-			MsgPrinter.printErrorMsg("Could not create OpenNLP POS tagger.");
+			LegasyErrorReporter.errorMsg("Could not create OpenNLP POS tagger.");
 //		if (!StanfordPosTagger.init("res/nlp/postagger/stanford/" +
 //				"train-wsj-0-18.holder"))
 //			MsgPrinter.printErrorMsg("Could not create Stanford POS tagger.");
 		
 		// create chunker
-		MsgPrinter.printStatusMsg("Creating chunker...");
+		LegasyErrorReporter.statusMsg("Creating chunker...");
 		if (!OpenNLP.createChunker("res/nlp/phrasechunker/opennlp/" +
 								   "EnglishChunk.bin.gz"))
-			MsgPrinter.printErrorMsg("Could not create chunker.");
+			LegasyErrorReporter.errorMsg("Could not create chunker.");
 		
 		// create syntactic parser
 //		MsgPrinter.printStatusMsg("Creating syntactic parser...");
@@ -360,15 +360,15 @@ public class PatternLearner {
 //		}
 		
 		// create named entity taggers
-		MsgPrinter.printStatusMsg("Creating NE taggers...");
+		LegasyErrorReporter.statusMsg("Creating NE taggers...");
 		NETagger.loadListTaggers("res/nlp/netagger/lists/");
 		NETagger.loadRegExTaggers("res/nlp/netagger/patterns.lst");
-		MsgPrinter.printStatusMsg("  ...loading models");
+		LegasyErrorReporter.statusMsg("  ...loading models");
 //		if (!NETagger.loadNameFinders("res/nlp/netagger/opennlp/"))
 //			MsgPrinter.printErrorMsg("Could not create OpenNLP NE tagger.");
 		if (!StanfordNeTagger.isInitialized() && !StanfordNeTagger.init())
-			MsgPrinter.printErrorMsg("Could not create Stanford NE tagger.");
-		MsgPrinter.printStatusMsg("  ...done");
+			LegasyErrorReporter.errorMsg("Could not create Stanford NE tagger.");
+		LegasyErrorReporter.statusMsg("  ...done");
 		
 		// create linker
 //		MsgPrinter.printStatusMsg("Creating linker...");
@@ -376,33 +376,33 @@ public class PatternLearner {
 //			MsgPrinter.printErrorMsg("Could not create linker.");
 		
 		// create WordNet dictionary
-		MsgPrinter.printStatusMsg("Creating WordNet dictionary...");
+		LegasyErrorReporter.statusMsg("Creating WordNet dictionary...");
 		if (!WordNet.initialize("res/ontologies/wordnet/file_properties.xml"))
-			MsgPrinter.printErrorMsg("Could not create WordNet dictionary.");
+			LegasyErrorReporter.errorMsg("Could not create WordNet dictionary.");
 		
 		// load function words (numbers are excluded)
-		MsgPrinter.printStatusMsg("Loading function verbs...");
+		LegasyErrorReporter.statusMsg("Loading function verbs...");
 		if (!FunctionWords.loadIndex("res/indices/functionwords_nonumbers"))
-			MsgPrinter.printErrorMsg("Could not load function words.");
+			LegasyErrorReporter.errorMsg("Could not load function words.");
 		
 		// load prepositions
-		MsgPrinter.printStatusMsg("Loading prepositions...");
+		LegasyErrorReporter.statusMsg("Loading prepositions...");
 		if (!Prepositions.loadIndex("res/indices/prepositions"))
-			MsgPrinter.printErrorMsg("Could not load prepositions.");
+			LegasyErrorReporter.errorMsg("Could not load prepositions.");
 		
 		// load irregular verbs
-		MsgPrinter.printStatusMsg("Loading irregular verbs...");
+		LegasyErrorReporter.statusMsg("Loading irregular verbs...");
 		if (!IrregularVerbs.loadVerbs("res/indices/irregularverbs"))
-			MsgPrinter.printErrorMsg("Could not load irregular verbs.");
+			LegasyErrorReporter.errorMsg("Could not load irregular verbs.");
 		
 		// load question patterns
-		MsgPrinter.printStatusMsg("Loading question patterns...");
+		LegasyErrorReporter.statusMsg("Loading question patterns...");
 		if (!QuestionInterpreter.loadPatterns("res/patternlearning/" +
 											  "questionpatterns/"))
-			MsgPrinter.printErrorMsg("Could not load question patterns.");
+			LegasyErrorReporter.errorMsg("Could not load question patterns.");
 		
 		// add knowledge miners used to fetch text passages for pattern learning
-		MsgPrinter.printStatusMsg("Adding BingKM...");
+		LegasyErrorReporter.statusMsg("Adding BingKM...");
 		Search.addKnowledgeMiner(new BingKM());
 //		MsgPrinter.printStatusMsg("Adding GoogleKM...");
 //		Search.addKnowledgeMiner(new GoogleKM());
@@ -426,11 +426,11 @@ public class PatternLearner {
 	 */
 	public static boolean interpret(String qFile, String aFile, String pFile) {
 		// load TREC data
-		MsgPrinter.printLoadingTRECData();
+		LegasyErrorReporter.printLoadingTRECData();
 		loadTRECData(qFile, aFile, pFile);
 		
 		// interpret TREC questions and save interpretations to files
-		MsgPrinter.printInterpretingQuestions();
+		LegasyErrorReporter.printInterpretingQuestions();
 		return interpretQuestions("res/patternlearning/interpretations");
 	}
 	
@@ -443,7 +443,7 @@ public class PatternLearner {
 	 */
 	public static boolean extract() {
 		// load tuples and form queries
-		MsgPrinter.printFormingQueries();
+		LegasyErrorReporter.printFormingQueries();
 		ass = new Hashtable<String, String>();
 		regexs = new Hashtable<String, String>();
 		Query[] queries;
@@ -455,15 +455,15 @@ public class PatternLearner {
 		queries = queryList.toArray(new Query[queryList.size()]);
 		
 		// fetch text passages
-		MsgPrinter.printFetchingPassages();
+		LegasyErrorReporter.printFetchingPassages();
 		Result[] results = fetchPassages(queries);
 		
 		// extract answer patterns
-		MsgPrinter.printExtractingPatterns();
+		LegasyErrorReporter.printExtractingPatterns();
 		extractPatterns(results);
 		
 		// save answer patterns
-		MsgPrinter.printSavingPatterns();
+		LegasyErrorReporter.printSavingPatterns();
 		return savePatterns("res/patternlearning/answerpatterns_extract");
 	}
 	
@@ -477,12 +477,12 @@ public class PatternLearner {
 	 */
 	public static boolean assess() {
 		// load answer patterns
-		MsgPrinter.printLoadingPatterns();
+		LegasyErrorReporter.printLoadingPatterns();
 		if (!loadPatterns("res/patternlearning/answerpatterns_extract"))
 			return false;
 		
 		// load tuples and form queries
-		MsgPrinter.printFormingQueries();
+		LegasyErrorReporter.printFormingQueries();
 		ass = new Hashtable<String, String>();
 		regexs = new Hashtable<String, String>();
 		Query[] queries;
@@ -494,15 +494,15 @@ public class PatternLearner {
 		queries = queryList.toArray(new Query[queryList.size()]);
 		
 		// fetch text passages
-		MsgPrinter.printFetchingPassages();
+		LegasyErrorReporter.printFetchingPassages();
 		Result[] results = fetchPassages(queries);
 		
 		// assess answer patterns
-		MsgPrinter.printAssessingPatterns();
+		LegasyErrorReporter.printAssessingPatterns();
 		assessPatterns(results);
 		
 		// save answer patterns
-		MsgPrinter.printSavingPatterns();
+		LegasyErrorReporter.printSavingPatterns();
 		return savePatterns("res/patternlearning/answerpatterns_assess");
 	}
 	
@@ -515,16 +515,16 @@ public class PatternLearner {
 	 */
 	public static boolean filter() {
 		// load answer patterns
-		MsgPrinter.printLoadingPatterns();
+		LegasyErrorReporter.printLoadingPatterns();
 		if (!loadPatterns("res/patternlearning/answerpatterns_assess"))
 			return false;
 		
 		// drop patterns with low support/confidence
-		MsgPrinter.printFilteringPatterns();
+		LegasyErrorReporter.printFilteringPatterns();
 		filterPatterns();
 		
 		// save answer patterns
-		MsgPrinter.printSavingPatterns();
+		LegasyErrorReporter.printSavingPatterns();
 		return savePatterns("res/patternlearning/answerpatterns");
 	}
 	
@@ -538,30 +538,30 @@ public class PatternLearner {
 	 * 			   argument 2: name of the answer file<br>
 	 * 			   argument 3: name of the file containing the patterns
 	 */
-	public static void main(String[] args) {
-		// enable output of status and error messages
-		MsgPrinter.enableStatusMsgs(true);
-		MsgPrinter.enableErrorMsgs(true);
-		
-//		if (args.length < 3) {
-//			MsgPrinter.printUsage("java PatternLearner question_file " +
-//								  "answer_file pattern_file");
-//			System.exit(1);
-//		}
-		
-		// initialize the system
-		init();
-		
-		// interpret TREC data
-//		interpret(args[0], args[1], args[2]);
-		
-		// extract answer patterns
-		extract();
-		
-		// assess answer patterns
-		assess();
-		
-		// filter answer patterns
-		filter();
-	}
+//	public static void main(String[] args) {
+//		// enable output of status and error messages
+//		LegasyErrorReporter.enableStatusMsgs(true);
+//		LegasyErrorReporter.enableErrorMsgs(true);
+//
+////		if (args.length < 3) {
+////			MsgPrinter.printUsage("java PatternLearner question_file " +
+////								  "answer_file pattern_file");
+////			System.exit(1);
+////		}
+//
+//		// initialize the system
+//		init();
+//
+//		// interpret TREC data
+////		interpret(args[0], args[1], args[2]);
+//
+//		// extract answer patterns
+//		extract();
+//
+//		// assess answer patterns
+//		assess();
+//
+//		// filter answer patterns
+//		filter();
+//	}
 }

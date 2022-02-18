@@ -1,6 +1,6 @@
 package info.ephyra.indexing;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.util.FileUtils;
 
 import java.io.BufferedReader;
@@ -41,11 +41,11 @@ public class AQUAINT2Preprocessor {
 		for (File file : files) {
 			// only parse data files
 			if (file.getName().contains(".")) {
-				MsgPrinter.printStatusMsg("Ignoring " + file.getPath() + ".\n");
+				LegasyErrorReporter.statusMsg("Ignoring " + file.getPath() + ".\n");
 				continue;
 			}
 			
-			MsgPrinter.printStatusMsg("Parsing " + file.getName() + "...");
+			LegasyErrorReporter.statusMsg("Parsing " + file.getName() + "...");
 			
 			// read file content and modify
 			ArrayList<String> doc = new ArrayList<String>();
@@ -107,7 +107,7 @@ public class AQUAINT2Preprocessor {
 							if (!(docType.equals("multi") ||
 									docType.equals("advis") ||
 									docType.equals("other")))
-								MsgPrinter.printStatusMsg("Document " + docNo +
+								LegasyErrorReporter.statusMsg("Document " + docNo +
 										" of type '" + docType + "' modified.");
 						}
 						mod = false;
@@ -133,7 +133,7 @@ public class AQUAINT2Preprocessor {
 				return false;
 			}
 			
-			MsgPrinter.printStatusMsg("...parsed.\n");
+			LegasyErrorReporter.statusMsg("...parsed.\n");
 		}
 		
 		return true;
@@ -150,11 +150,11 @@ public class AQUAINT2Preprocessor {
 		for (File file : files) {
 			// only parse data files
 			if (file.getName().contains(".")) {
-				MsgPrinter.printStatusMsg("Ignoring " + file.getPath() + ".\n");
+				LegasyErrorReporter.statusMsg("Ignoring " + file.getPath() + ".\n");
 				continue;
 			}
 			
-			MsgPrinter.printStatusMsg("Parsing " + file.getName() + "...");
+			LegasyErrorReporter.statusMsg("Parsing " + file.getName() + "...");
 			
 			// read file content and modify
 			ArrayList<String> doc = new ArrayList<String>();
@@ -209,7 +209,7 @@ public class AQUAINT2Preprocessor {
 				return false;
 			}
 			
-			MsgPrinter.printStatusMsg("...parsed.\n");
+			LegasyErrorReporter.statusMsg("...parsed.\n");
 		}
 		
 		return true;
@@ -222,34 +222,34 @@ public class AQUAINT2Preprocessor {
 	 * 
 	 * @param args argument 1: directory of the AQUAINT-2 corpus
 	 */
-	public static void main(String[] args) {
-		if (args.length < 1) {
-			MsgPrinter.printUsage("java AQUAINT2Preprocessor " +
-					"AQUAINT2_directory");
-			System.exit(1);
-		}
-		dir = args[0];
-		
-		// enable output of status and error messages
-		MsgPrinter.enableStatusMsgs(true);
-		MsgPrinter.enableErrorMsgs(true);
-		
-		// add paragraph tags if missing
-		MsgPrinter.printStatusMsg("Adding paragraph tags:\n");
-		if (addParagraphTags())
-			MsgPrinter.printStatusMsg("Paragraph tags added successfully.\n");
-		else {
-			MsgPrinter.printErrorMsg("Could not add paragraph tags.");
-			System.exit(1);
-		}
-		
-		// convert to 'trectext'
-		MsgPrinter.printStatusMsg("Converting to 'trectext' format:\n");
-		if (convertToTrectext())
-			MsgPrinter.printStatusMsg("Documents converted successfully.");
-		else {
-			MsgPrinter.printErrorMsg("Could not convert documents.");
-			System.exit(1);
-		}
-	}
+//	public static void main(String[] args) {
+//		if (args.length < 1) {
+//			LegasyErrorReporter.printUsage("java AQUAINT2Preprocessor " +
+//					"AQUAINT2_directory");
+//			System.exit(1);
+//		}
+//		dir = args[0];
+//
+//		// enable output of status and error messages
+//		LegasyErrorReporter.enableStatusMsgs(true);
+//		LegasyErrorReporter.enableErrorMsgs(true);
+//
+//		// add paragraph tags if missing
+//		LegasyErrorReporter.statusMsg("Adding paragraph tags:\n");
+//		if (addParagraphTags())
+//			LegasyErrorReporter.statusMsg("Paragraph tags added successfully.\n");
+//		else {
+//			LegasyErrorReporter.errorMsg("Could not add paragraph tags.");
+//			System.exit(1);
+//		}
+//
+//		// convert to 'trectext'
+//		LegasyErrorReporter.statusMsg("Converting to 'trectext' format:\n");
+//		if (convertToTrectext())
+//			LegasyErrorReporter.statusMsg("Documents converted successfully.");
+//		else {
+//			LegasyErrorReporter.errorMsg("Could not convert documents.");
+//			System.exit(1);
+//		}
+//	}
 }

@@ -1,6 +1,6 @@
 package info.ephyra.questionanalysis;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.nlp.indices.FunctionWords;
 import info.ephyra.nlp.semantics.ontologies.WordNet;
 import info.ephyra.util.Dictionary;
@@ -109,9 +109,9 @@ public class QuestionInterpreter {
 							// add keywords to the dictionary for prop
 							addKeywords(line, prop);
 						} catch (PatternSyntaxException pse) {
-							MsgPrinter.printErrorMsg("Problem loading pattern:\n" +
+							LegasyErrorReporter.errorMsg("Problem loading pattern:\n" +
 													 prop + " " + line);
-							MsgPrinter.printErrorMsg(pse.getMessage());
+							LegasyErrorReporter.errorMsg(pse.getMessage());
 						}
 					}
 				}

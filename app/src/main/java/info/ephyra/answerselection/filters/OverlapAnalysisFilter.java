@@ -1,6 +1,6 @@
 package info.ephyra.answerselection.filters;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.search.Result;
 import info.ephyra.trec.TRECPattern;
 import info.ephyra.util.StringUtils;
@@ -72,9 +72,9 @@ public class OverlapAnalysisFilter extends Filter {
 	 * Prints the current overlap analysis.
 	 */
 	public void printOverlapAnalysis() {
-		MsgPrinter.printStatusMsg("Overlap analysis:");
+		LegasyErrorReporter.statusMsg("Overlap analysis:");
 		for (String key : overlapAnalysis.keySet())
-			MsgPrinter.printStatusMsg(key + ": " + overlapAnalysis.get(key));
+			LegasyErrorReporter.statusMsg(key + ": " + overlapAnalysis.get(key));
 	}
 	
 	/**

@@ -1,6 +1,6 @@
 package info.ephyra.nlp.semantics;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.util.FileCache;
 import info.ephyra.util.RegexConverter;
 
@@ -288,7 +288,7 @@ public class ASSERT {
 		String[][] parses = new String[ss.length][];
 		if (ss.length > 0 && ASSERT_DIR != null && ASSERT_DIR.length() > 0) {
 			try {
-				MsgPrinter.printStatusMsgTimestamp("Parsing " + ss.length + " sentences with ASSERT...");
+				LegasyErrorReporter.statusMsgTimestamp("Parsing " + ss.length + " sentences with ASSERT...");
 				
 				int beginIndex = 0;
 				while (beginIndex < ss.length) {  // restart ASSERT if it crashed
@@ -305,7 +305,7 @@ public class ASSERT {
 					// merge parses in one array
 					int lastIndex = checkLogFile(logf);
 					if (lastIndex > -1 && lastIndex < Integer.MAX_VALUE) {
-						MsgPrinter.printErrorMsg("ASSERT could not parse sentence:\n" + sentences[lastIndex]);
+						LegasyErrorReporter.errorMsg("ASSERT could not parse sentence:\n" + sentences[lastIndex]);
 						output[lastIndex] = null;
 					} else if (lastIndex == Integer.MAX_VALUE) {
 						lastIndex = sentences.length - 1;
@@ -317,9 +317,9 @@ public class ASSERT {
 					beginIndex = lastIndex + 1;
 				}
 				
-				MsgPrinter.printStatusMsgTimestamp("...done");
+				LegasyErrorReporter.statusMsgTimestamp("...done");
 			} catch (Exception e) {
-				MsgPrinter.printErrorMsg("\nCould not call ASSERT:\n" + e.getMessage());
+				LegasyErrorReporter.errorMsg("\nCould not call ASSERT:\n" + e.getMessage());
 				System.exit(1);
 			}
 		}

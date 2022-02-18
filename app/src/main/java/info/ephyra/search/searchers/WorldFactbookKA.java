@@ -1,6 +1,6 @@
 package info.ephyra.search.searchers;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.nlp.SentenceExtractor;
 import info.ephyra.search.Result;
 
@@ -82,7 +82,7 @@ public class WorldFactbookKA extends KnowledgeAnnotator {
 			in.close();
 		}
 		catch (Exception e) {
-			MsgPrinter.printSearchError(e);  // print search error message
+			LegasyErrorReporter.printSearchError(e);  // print search error message
 		}
 	}
 	
@@ -134,7 +134,7 @@ public class WorldFactbookKA extends KnowledgeAnnotator {
 			}
 		}
 		catch (Exception e) {
-			MsgPrinter.printSearchError(e);  // print search error message
+			LegasyErrorReporter.printSearchError(e);  // print search error message
 		}
 		
 		return new Result[0];  // search failed

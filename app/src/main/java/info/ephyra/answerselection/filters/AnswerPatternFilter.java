@@ -1,7 +1,7 @@
 package info.ephyra.answerselection.filters;
 
 import info.ephyra.answerselection.AnswerPattern;
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.nlp.NETagger;
 import info.ephyra.nlp.OpenNLP;
 import info.ephyra.querygeneration.Query;
@@ -338,7 +338,7 @@ public class AnswerPatternFilter extends Filter {
 		boolean added = patterns.add(new AnswerPattern(expr, prop));
 		
 		// print out new patterns
-		if (added) MsgPrinter.printStatusMsg(prop + ": " + expr);
+		if (added) LegasyErrorReporter.statusMsg(prop + ": " + expr);
 		
 		return added;
 	}
@@ -364,7 +364,7 @@ public class AnswerPatternFilter extends Filter {
 			HashSet<AnswerPattern> patterns;
 			
 			for (File file : files) {
-				MsgPrinter.printStatusMsg("  ...for " + file.getName());
+				LegasyErrorReporter.statusMsg("  ...for " + file.getName());
 				
 				prop = file.getName();
 				in = new BufferedReader(new FileReader(file));
@@ -387,9 +387,9 @@ public class AnswerPatternFilter extends Filter {
 						patterns.add(new AnswerPattern(expr, prop,
 													   correct, wrong));
 					} catch (PatternSyntaxException pse) {
-						MsgPrinter.printErrorMsg("Problem loading pattern:\n" +
+						LegasyErrorReporter.errorMsg("Problem loading pattern:\n" +
 												 prop + " " + expr);
-						MsgPrinter.printErrorMsg(pse.getMessage());
+						LegasyErrorReporter.errorMsg(pse.getMessage());
 					}
 				}
 				props.put(prop, patterns);
@@ -397,7 +397,7 @@ public class AnswerPatternFilter extends Filter {
 				in.close();
 			}
 			
-			MsgPrinter.printStatusMsg("  ...done");
+			LegasyErrorReporter.statusMsg("  ...done");
 		} catch (IOException e) {
 			return false;
 		}

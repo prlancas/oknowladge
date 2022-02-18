@@ -1,6 +1,6 @@
 package info.ephyra.search.searchers;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.search.Result;
 
 import com.google.soap.search.GoogleSearch;
@@ -75,10 +75,10 @@ public class GoogleKM extends KnowledgeMiner {
 			try {
 				googleResult = search.doSearch();
 			} catch (GoogleSearchFault e) {
-				MsgPrinter.printSearchError(e);  // print search error message
+				LegasyErrorReporter.printSearchError(e);  // print search error message
 				
 				if (retries == RETRIES) {
-					MsgPrinter.printErrorMsg("\nSearch failed.");
+					LegasyErrorReporter.errorMsg("\nSearch failed.");
 					System.exit(1);
 				}
 				retries++;

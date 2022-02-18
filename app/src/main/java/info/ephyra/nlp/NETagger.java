@@ -1,6 +1,6 @@
 package info.ephyra.nlp;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.util.FileUtils;
 import info.ephyra.util.StringUtils;
 
@@ -84,7 +84,7 @@ public class NETagger {
 		    	
 		    	finders[i] = new NameFinder(model);
 		    	finderNames[i] = files[i].getName().split("\\.")[0];
-				MsgPrinter.printStatusMsg("    ...for " + finderNames[i]);
+				LegasyErrorReporter.statusMsg("    ...for " + finderNames[i]);
 		    }
 		} catch (IOException e) {
 			return false;
@@ -117,7 +117,7 @@ public class NETagger {
 	public static void loadListTaggers(String listDirectory) {
 		if (lists.length > 0) return;
 		
-		MsgPrinter.printStatusMsg("  ...loading lists");
+		LegasyErrorReporter.statusMsg("  ...loading lists");
 		
 		ArrayList<String> listsList = new ArrayList<String>(); 
 		ArrayList<String> listNamesList = new ArrayList<String>();
@@ -134,7 +134,7 @@ public class NETagger {
 			listsList.add(list.getName());
 			listName = listName.substring(0, (listName.length() - 4));
 			listNamesList.add("NE" + listName);
-			MsgPrinter.printStatusMsg("    ...for NE" + listName);
+			LegasyErrorReporter.statusMsg("    ...for NE" + listName);
 		}
 		
 		lists = listsList.toArray(new String[listsList.size()]);
@@ -195,7 +195,7 @@ public class NETagger {
 	public static void loadRegExTaggers(String regExListFileName) {
 		if (patterns.length > 0) return;
 		
-		MsgPrinter.printStatusMsg("  ...loading patterns");
+		LegasyErrorReporter.statusMsg("  ...loading patterns");
 		
 		ArrayList<String> patternNameList = new ArrayList<String>();
 		ArrayList<Pattern> patternList = new ArrayList<Pattern>();
@@ -265,9 +265,9 @@ public class NETagger {
 						patternMaxTokensList.add(new Integer(maxTokens));
 					}
 					
-					MsgPrinter.printStatusMsg("    ...for " + neName);
+					LegasyErrorReporter.statusMsg("    ...for " + neName);
 				} catch (Exception e) {
-					MsgPrinter.printErrorMsg("    ...could not add " + neName);
+					LegasyErrorReporter.errorMsg("    ...could not add " + neName);
 				}
 			}
 			

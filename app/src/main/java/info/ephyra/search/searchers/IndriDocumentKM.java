@@ -1,6 +1,6 @@
 package info.ephyra.search.searchers;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.search.Result;
 
 import java.util.regex.Matcher;
@@ -149,7 +149,7 @@ public class IndriDocumentKM extends KnowledgeMiner {
 			} else if (indriUrls != null && indriUrls.length > 0) {
 				for (String indriUrl : indriUrls) env.addServer(indriUrl);
 			} else {
-				MsgPrinter.printErrorMsg("Directories of Indri indices or " +
+				LegasyErrorReporter.errorMsg("Directories of Indri indices or " +
 						"URLs of Indri servers required.");
 				System.exit(1);
 			}
@@ -181,9 +181,9 @@ public class IndriDocumentKM extends KnowledgeMiner {
 			// return results
 			return getResults(docs, docNos, false);
 		} catch (Exception e) {
-			MsgPrinter.printSearchError(e);  // print search error message
+			LegasyErrorReporter.printSearchError(e);  // print search error message
 			
-			MsgPrinter.printErrorMsg("\nSearch failed.");
+			LegasyErrorReporter.errorMsg("\nSearch failed.");
 			System.exit(1);
 			
 			return null;

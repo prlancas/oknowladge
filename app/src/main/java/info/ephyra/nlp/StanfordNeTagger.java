@@ -1,6 +1,6 @@
 package info.ephyra.nlp;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,11 +108,11 @@ public class StanfordNeTagger {
 		try {
 			neString = classifier.testString(sentence);
 		} catch (Exception e) {
-			MsgPrinter.printErrorMsg("Stanford NE Recognizer failed to tag " +
+			LegasyErrorReporter.errorMsg("Stanford NE Recognizer failed to tag " +
 					"the following sentence:");
-			MsgPrinter.printErrorMsg(sentence);
-			MsgPrinter.printErrorMsg("Error message:");
-			MsgPrinter.printErrorMsg(e.toString());
+			LegasyErrorReporter.errorMsg(sentence);
+			LegasyErrorReporter.errorMsg("Error message:");
+			LegasyErrorReporter.errorMsg(e.toString());
 		}
 		
 		String[] neTokens = neString.split("\\s");

@@ -1,6 +1,6 @@
 package info.ephyra.answerselection.filters;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.search.Result;
 
 import java.io.File;
@@ -63,8 +63,8 @@ public class SerializationFilter extends Filter {
 			
 			oos.close();
 		} catch (IOException e) {
-			MsgPrinter.printErrorMsg("Could not write serialized results:");
-			MsgPrinter.printErrorMsg(e.toString());
+			LegasyErrorReporter.errorMsg("Could not write serialized results:");
+			LegasyErrorReporter.errorMsg(e.toString());
 			System.exit(1);
 		}
 		

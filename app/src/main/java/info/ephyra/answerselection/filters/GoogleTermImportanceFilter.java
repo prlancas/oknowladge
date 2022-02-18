@@ -1,6 +1,6 @@
 package info.ephyra.answerselection.filters;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.nlp.NETagger;
 import info.ephyra.nlp.OpenNLP;
 import info.ephyra.nlp.SnowballStemmer;
@@ -174,10 +174,10 @@ public class GoogleTermImportanceFilter extends WebTermImportanceFilter {
 					try {
 						googleResult = search.doSearch();
 					} catch (GoogleSearchFault e) {
-						MsgPrinter.printSearchError(e);  // print search error message
+						LegasyErrorReporter.printSearchError(e);  // print search error message
 						
 						if (retries == RETRIES) {
-							MsgPrinter.printErrorMsg("\nSearch failed.");
+							LegasyErrorReporter.errorMsg("\nSearch failed.");
 							//System.exit(1);
 							return termCounters;
 						}
@@ -222,99 +222,99 @@ public class GoogleTermImportanceFilter extends WebTermImportanceFilter {
 		return termCounters;
 	}
 	
-	public static void main(String[] args) {
-		
-		TEST_TARGET_GENERATION = true;
-		
-		MsgPrinter.enableStatusMsgs(true);
-		MsgPrinter.enableErrorMsgs(true);
-		
-		// create tokenizer
-		MsgPrinter.printStatusMsg("Creating tokenizer...");
-		if (!OpenNLP.createTokenizer("res/nlp/tokenizer/opennlp/EnglishTok.bin.gz"))
-			MsgPrinter.printErrorMsg("Could not create tokenizer.");
-//		LingPipe.createTokenizer();
-		
-		// create sentence detector
-//		MsgPrinter.printStatusMsg("Creating sentence detector...");
-//		if (!OpenNLP.createSentenceDetector("res/nlp/sentencedetector/opennlp/EnglishSD.bin.gz"))
-//			MsgPrinter.printErrorMsg("Could not create sentence detector.");
-//		LingPipe.createSentenceDetector();
-		
-		// create stemmer
-		MsgPrinter.printStatusMsg("Creating stemmer...");
-		SnowballStemmer.create();
-		
-		// create part of speech tagger
-		MsgPrinter.printStatusMsg("Creating POS tagger...");
-		if (!OpenNLP.createPosTagger("res/nlp/postagger/opennlp/tag.bin.gz",
-									 "res/nlp/postagger/opennlp/tagdict"))
-			MsgPrinter.printErrorMsg("Could not create OpenNLP POS tagger.");
-//		if (!StanfordPosTagger.init("res/nlp/postagger/stanford/" +
-//				"train-wsj-0-18.holder"))
-//			MsgPrinter.printErrorMsg("Could not create Stanford POS tagger.");
-		
-		// create chunker
-		MsgPrinter.printStatusMsg("Creating chunker...");
-		if (!OpenNLP.createChunker("res/nlp/phrasechunker/opennlp/" +
-								   "EnglishChunk.bin.gz"))
-			MsgPrinter.printErrorMsg("Could not create chunker.");
-		
-		// create named entity taggers
-		MsgPrinter.printStatusMsg("Creating NE taggers...");
-		NETagger.loadListTaggers("res/nlp/netagger/lists/");
-		NETagger.loadRegExTaggers("res/nlp/netagger/patterns.lst");
-		MsgPrinter.printStatusMsg("  ...loading models");
-//		if (!NETagger.loadNameFinders("res/nlp/netagger/opennlp/"))
-//			MsgPrinter.printErrorMsg("Could not create OpenNLP NE tagger.");
-		if (!StanfordNeTagger.isInitialized() && !StanfordNeTagger.init())
-			MsgPrinter.printErrorMsg("Could not create Stanford NE tagger.");
-		MsgPrinter.printStatusMsg("  ...done");
-		
-//		WebTermImportanceFilter wtif = new TargetGeneratorTest();
-//		TRECTarget[] targets = TREC13To16Parser.loadTargets(args[0]);
-//		for (TRECTarget target : targets) {
-//			String question = target.getTargetDesc();
-//			
-//			// query generation
-//			MsgPrinter.printGeneratingQueries();
-//			String qn = QuestionNormalizer.normalize(question);
-//			MsgPrinter.printNormalization(qn);  // print normalized question string
-//			Logger.logNormalization(qn);  // log normalized question string
-//			String[] kws = KeywordExtractor.getKeywords(qn);
-//			AnalyzedQuestion aq = new AnalyzedQuestion(question);
-//			aq.setKeywords(kws);
-//			aq.setFactoid(false);
-//			
-//			Query[] queries = new BagOfWordsG().generateQueries(aq);
-//			for (int q = 0; q < queries.length; q++)
-//				queries[q].setOriginalQueryString(question);
-//			
-//			Result[] results = new Result[1];
-//			results[0] = new Result("This would be the answer", queries[0]);
-//			wtif.apply(results);
+//	public static void main(String[] args) {
+//
+//		TEST_TARGET_GENERATION = true;
+//
+//		LegasyErrorReporter.enableStatusMsgs(true);
+//		LegasyErrorReporter.enableErrorMsgs(true);
+//
+//		// create tokenizer
+//		LegasyErrorReporter.statusMsg("Creating tokenizer...");
+//		if (!OpenNLP.createTokenizer("res/nlp/tokenizer/opennlp/EnglishTok.bin.gz"))
+//			LegasyErrorReporter.errorMsg("Could not create tokenizer.");
+////		LingPipe.createTokenizer();
+//
+//		// create sentence detector
+////		MsgPrinter.printStatusMsg("Creating sentence detector...");
+////		if (!OpenNLP.createSentenceDetector("res/nlp/sentencedetector/opennlp/EnglishSD.bin.gz"))
+////			MsgPrinter.printErrorMsg("Could not create sentence detector.");
+////		LingPipe.createSentenceDetector();
+//
+//		// create stemmer
+//		LegasyErrorReporter.statusMsg("Creating stemmer...");
+//		SnowballStemmer.create();
+//
+//		// create part of speech tagger
+//		LegasyErrorReporter.statusMsg("Creating POS tagger...");
+//		if (!OpenNLP.createPosTagger("res/nlp/postagger/opennlp/tag.bin.gz",
+//									 "res/nlp/postagger/opennlp/tagdict"))
+//			LegasyErrorReporter.errorMsg("Could not create OpenNLP POS tagger.");
+////		if (!StanfordPosTagger.init("res/nlp/postagger/stanford/" +
+////				"train-wsj-0-18.holder"))
+////			MsgPrinter.printErrorMsg("Could not create Stanford POS tagger.");
+//
+//		// create chunker
+//		LegasyErrorReporter.statusMsg("Creating chunker...");
+//		if (!OpenNLP.createChunker("res/nlp/phrasechunker/opennlp/" +
+//								   "EnglishChunk.bin.gz"))
+//			LegasyErrorReporter.errorMsg("Could not create chunker.");
+//
+//		// create named entity taggers
+//		LegasyErrorReporter.statusMsg("Creating NE taggers...");
+//		NETagger.loadListTaggers("res/nlp/netagger/lists/");
+//		NETagger.loadRegExTaggers("res/nlp/netagger/patterns.lst");
+//		LegasyErrorReporter.statusMsg("  ...loading models");
+////		if (!NETagger.loadNameFinders("res/nlp/netagger/opennlp/"))
+////			MsgPrinter.printErrorMsg("Could not create OpenNLP NE tagger.");
+//		if (!StanfordNeTagger.isInitialized() && !StanfordNeTagger.init())
+//			LegasyErrorReporter.errorMsg("Could not create Stanford NE tagger.");
+//		LegasyErrorReporter.statusMsg("  ...done");
+//
+////		WebTermImportanceFilter wtif = new TargetGeneratorTest();
+////		TRECTarget[] targets = TREC13To16Parser.loadTargets(args[0]);
+////		for (TRECTarget target : targets) {
+////			String question = target.getTargetDesc();
+////
+////			// query generation
+////			MsgPrinter.printGeneratingQueries();
+////			String qn = QuestionNormalizer.normalize(question);
+////			MsgPrinter.printNormalization(qn);  // print normalized question string
+////			Logger.logNormalization(qn);  // log normalized question string
+////			String[] kws = KeywordExtractor.getKeywords(qn);
+////			AnalyzedQuestion aq = new AnalyzedQuestion(question);
+////			aq.setKeywords(kws);
+////			aq.setFactoid(false);
+////
+////			Query[] queries = new BagOfWordsG().generateQueries(aq);
+////			for (int q = 0; q < queries.length; q++)
+////				queries[q].setOriginalQueryString(question);
+////
+////			Result[] results = new Result[1];
+////			results[0] = new Result("This would be the answer", queries[0]);
+////			wtif.apply(results);
+////		}
+//
+//		GoogleTermImportanceFilter gtif = new GoogleTermImportanceFilter(NO_NORMALIZATION, NO_NORMALIZATION, false);
+//		String[] targets = gtif.getTargets("Warren Moon");
+//		final HashMap<String, TermCounter> termCounters = gtif.getTermCounters(targets);
+//		ArrayList<String> termList = new ArrayList<String>(termCounters.keySet());
+//		Collections.sort(termList, new Comparator<String>() {
+//			public int compare(String o1, String o2) {
+//				int tc1 = termCounters.get(o1).getValue();
+//				int tc2 = termCounters.get(o2).getValue();
+//				return ((tc1 == tc2) ? o1.compareTo(o2) : (tc2 - tc1));
+//			}
+//		});
+////		Iterator<String> terms = termCounters.keySet().iterator();
+//		Iterator<String> terms = termList.iterator();
+//		int atLeast5 = 0;
+//		while (terms.hasNext()) {
+//			String term = terms.next();
+//			int tc = termCounters.get(term).getValue();
+//			System.out.println(term + ": " + tc);
+//			if (tc > 4) atLeast5++;
 //		}
-		
-		GoogleTermImportanceFilter gtif = new GoogleTermImportanceFilter(NO_NORMALIZATION, NO_NORMALIZATION, false);
-		String[] targets = gtif.getTargets("Warren Moon");
-		final HashMap<String, TermCounter> termCounters = gtif.getTermCounters(targets);
-		ArrayList<String> termList = new ArrayList<String>(termCounters.keySet());
-		Collections.sort(termList, new Comparator<String>() {
-			public int compare(String o1, String o2) {
-				int tc1 = termCounters.get(o1).getValue();
-				int tc2 = termCounters.get(o2).getValue();
-				return ((tc1 == tc2) ? o1.compareTo(o2) : (tc2 - tc1)); 
-			}
-		});
-//		Iterator<String> terms = termCounters.keySet().iterator();
-		Iterator<String> terms = termList.iterator();
-		int atLeast5 = 0;
-		while (terms.hasNext()) {
-			String term = terms.next();
-			int tc = termCounters.get(term).getValue();
-			System.out.println(term + ": " + tc);
-			if (tc > 4) atLeast5++;
-		}
-		System.out.println("At least 5 times: " + atLeast5);
-	}
+//		System.out.println("At least 5 times: " + atLeast5);
+//	}
 }

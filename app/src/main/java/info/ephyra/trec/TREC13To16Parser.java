@@ -1,6 +1,6 @@
 package info.ephyra.trec;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.querygeneration.Query;
 import info.ephyra.questionanalysis.QuestionInterpretation;
 import info.ephyra.search.Result;
@@ -113,8 +113,8 @@ public class TREC13To16Parser {
 			
 			return targets;
 		} catch (Exception e) {
-			MsgPrinter.printErrorMsg("Failed to load or parse question file:");
-			MsgPrinter.printErrorMsg(e.toString());
+			LegasyErrorReporter.errorMsg("Failed to load or parse question file:");
+			LegasyErrorReporter.errorMsg(e.toString());
 			
 			return null;
 		}
@@ -160,8 +160,8 @@ public class TREC13To16Parser {
 			
 			return patterns.toArray(new TRECPattern[patterns.size()]);
 		} catch (IOException e) {
-			MsgPrinter.printErrorMsg("Failed to load or parse pattern file:");
-			MsgPrinter.printErrorMsg(e.toString());
+			LegasyErrorReporter.errorMsg("Failed to load or parse pattern file:");
+			LegasyErrorReporter.errorMsg(e.toString());
 			
 			return null;
 		}
@@ -270,8 +270,8 @@ public class TREC13To16Parser {
 			
 			return null;  // question not found
 		} catch (Exception e) {
-			MsgPrinter.printErrorMsg("Failed to load or parse log file:");
-			MsgPrinter.printErrorMsg(e.toString());
+			LegasyErrorReporter.errorMsg("Failed to load or parse log file:");
+			LegasyErrorReporter.errorMsg(e.toString());
 			
 			return null;
 		}
@@ -309,8 +309,8 @@ public class TREC13To16Parser {
 			
 			out.close();
 		} catch (IOException e) {
-			MsgPrinter.printErrorMsg("Failed to save answers:");
-			MsgPrinter.printErrorMsg(e.toString());
+			LegasyErrorReporter.errorMsg("Failed to save answers:");
+			LegasyErrorReporter.errorMsg(e.toString());
 			return false;
 		}
 		

@@ -1,6 +1,6 @@
 package info.ephyra.answerselection.filters;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.nlp.NETagger;
 import info.ephyra.nlp.OpenNLP;
 import info.ephyra.search.Result;
@@ -167,7 +167,7 @@ public class AnswerProjectionFilter extends Filter {
 							projected.add(result);
 							break;
 						} else {
-							MsgPrinter.printErrorMsg("\nNormalization could " +
+							LegasyErrorReporter.errorMsg("\nNormalization could " +
 									"not be undone:\n" + norm);
 						}
 					}

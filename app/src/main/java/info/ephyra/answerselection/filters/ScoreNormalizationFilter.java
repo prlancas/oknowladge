@@ -1,6 +1,6 @@
 package info.ephyra.answerselection.filters;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.questionanalysis.AnalyzedQuestion;
 import info.ephyra.search.Result;
 import info.ephyra.util.ArrayUtils;
@@ -170,7 +170,7 @@ public class ScoreNormalizationFilter extends Filter {
 			// make sure that first serialized object is an AnalyzedQuestion,
 			// then discard it
 			if (!(ois.readObject() instanceof AnalyzedQuestion)) {
-				MsgPrinter.printErrorMsg("First serialized object is not an" +
+				LegasyErrorReporter.errorMsg("First serialized object is not an" +
 						"AnalyzedQuestion.");
 				System.exit(1);
 			}
@@ -180,8 +180,8 @@ public class ScoreNormalizationFilter extends Filter {
 			
 			ois.close();
 		} catch (Exception e) {
-			MsgPrinter.printErrorMsg("Could not read serialized results:");
-			MsgPrinter.printErrorMsg(e.toString());
+			LegasyErrorReporter.errorMsg("Could not read serialized results:");
+			LegasyErrorReporter.errorMsg(e.toString());
 			System.exit(1);
 		}
 		
@@ -493,7 +493,7 @@ public class ScoreNormalizationFilter extends Filter {
 		}
 		// Unknown model
 		else {
-			MsgPrinter.printErrorMsg("Unknown model: " + model);
+			LegasyErrorReporter.errorMsg("Unknown model: " + model);
 			System.exit(1);
 		}
 		
@@ -670,18 +670,17 @@ public class ScoreNormalizationFilter extends Filter {
 					StringUtils.concat(dataSets, "+");
 				File reportFile = new File(reportDir, filename);
 				if (reportFile.exists()) {
-					MsgPrinter.printErrorMsg("File " + reportFile +
+					LegasyErrorReporter.errorMsg("File " + reportFile +
 							" already exists.");
 					continue;
 				}
 				
 				// evaluate combination
 				String msg = "Evaluating model " + model + " with feature(s) " +
-						StringUtils.concat(features, ", ") + " (" +
-						MsgPrinter.getTimestamp() + ")...";
-				MsgPrinter.printStatusMsg(StringUtils.repeat("-", msg.length()));
-				MsgPrinter.printStatusMsg(msg);
-				MsgPrinter.printStatusMsg(StringUtils.repeat("-", msg.length()));
+						StringUtils.concat(features, ", ") + "...";
+				LegasyErrorReporter.statusMsg(StringUtils.repeat("-", msg.length()));
+				LegasyErrorReporter.statusMsg(msg);
+				LegasyErrorReporter.statusMsg(StringUtils.repeat("-", msg.length()));
 				long runTime = System.currentTimeMillis();
 				Evaluation eval = evaluate(serializedDir, features, model);
 				runTime = System.currentTimeMillis() - runTime;
@@ -692,9 +691,9 @@ public class ScoreNormalizationFilter extends Filter {
 				try {
 					FileUtils.writeString(report, reportFile, "UTF-8");
 				} catch (IOException e) {
-					MsgPrinter.printErrorMsg("Failed to write report to file " +
+					LegasyErrorReporter.errorMsg("Failed to write report to file " +
 							reportFile + ":");
-					MsgPrinter.printErrorMsg(e.toString());
+					LegasyErrorReporter.errorMsg(e.toString());
 					System.exit(1);
 				}
 				
@@ -717,57 +716,57 @@ public class ScoreNormalizationFilter extends Filter {
 	 * @param args {directory containing serialized results,
 	 *              output directory for evaluation reports and classifier}
 	 */
-	public static void main(String[] args) {
-		// enable output of status and error messages
-		MsgPrinter.enableStatusMsgs(true);
-		MsgPrinter.enableErrorMsgs(true);
-		
-		// get command line parameters
-		if (args.length < 2) {
-			MsgPrinter.printUsage("java ScoreNormalizationFilter " +
-					"serialized_results_dir output_dir");
-			System.exit(1);
-		}
-		String serializedDir = args[0];
-		String outputDir = args[1];
-		
-//		// evaluate all combinations of features and models,
-//		// get best combination according to F1 measure
-//		String reportsDir = new File(outputDir, "reports").getPath();
-//		String[][] combination = evaluateAll(serializedDir, reportsDir);
-//		String[] features = combination[0];
-//		String model = combination[1][0];
-		// or simply get selected features and model
-		String[] features = SELECTED_FEATURES;
-		String model = SELECTED_MODEL;
-		
-		// train classifier using best/selected features and model
-		String msg = "Training classifier using model " + model +
-				" with feature(s) " + StringUtils.concat(features, ", ") +
-				" (" + MsgPrinter.getTimestamp() + ")...";
-		MsgPrinter.printStatusMsg(StringUtils.repeat("-", msg.length()));
-		MsgPrinter.printStatusMsg(msg);
-		MsgPrinter.printStatusMsg(StringUtils.repeat("-", msg.length()));
-		Classifier classifier = train(serializedDir, features, model);
-		
-		// serialize classifier to file
-		String classifiersDir = new File(outputDir, "classifiers").getPath();
-		String[] dataSets = FileUtils.getVisibleSubDirs(serializedDir);
-		String filename =
-			model + "_" + StringUtils.concat(features, "+") + "_" +
-			StringUtils.concat(dataSets, "+") + ".serialized";
-		try {
-			FileUtils.writeSerialized(classifier,
-					new File(classifiersDir, filename));
-		} catch (IOException e) {
-			MsgPrinter.printErrorMsg("Failed to serialize classifier to file " +
-					filename + ":");
-			MsgPrinter.printErrorMsg(e.toString());
-			System.exit(1);
-		}
-		
-		MsgPrinter.printStatusMsg("...done.");
-	}
+//	public static void main(String[] args) {
+//		// enable output of status and error messages
+//		LegasyErrorReporter.enableStatusMsgs(true);
+//		LegasyErrorReporter.enableErrorMsgs(true);
+//
+//		// get command line parameters
+//		if (args.length < 2) {
+//			LegasyErrorReporter.printUsage("java ScoreNormalizationFilter " +
+//					"serialized_results_dir output_dir");
+//			System.exit(1);
+//		}
+//		String serializedDir = args[0];
+//		String outputDir = args[1];
+//
+////		// evaluate all combinations of features and models,
+////		// get best combination according to F1 measure
+////		String reportsDir = new File(outputDir, "reports").getPath();
+////		String[][] combination = evaluateAll(serializedDir, reportsDir);
+////		String[] features = combination[0];
+////		String model = combination[1][0];
+//		// or simply get selected features and model
+//		String[] features = SELECTED_FEATURES;
+//		String model = SELECTED_MODEL;
+//
+//		// train classifier using best/selected features and model
+//		String msg = "Training classifier using model " + model +
+//				" with feature(s) " + StringUtils.concat(features, ", ") +
+//				" (" + LegasyErrorReporter.getTimestamp() + ")...";
+//		LegasyErrorReporter.statusMsg(StringUtils.repeat("-", msg.length()));
+//		LegasyErrorReporter.statusMsg(msg);
+//		LegasyErrorReporter.statusMsg(StringUtils.repeat("-", msg.length()));
+//		Classifier classifier = train(serializedDir, features, model);
+//
+//		// serialize classifier to file
+//		String classifiersDir = new File(outputDir, "classifiers").getPath();
+//		String[] dataSets = FileUtils.getVisibleSubDirs(serializedDir);
+//		String filename =
+//			model + "_" + StringUtils.concat(features, "+") + "_" +
+//			StringUtils.concat(dataSets, "+") + ".serialized";
+//		try {
+//			FileUtils.writeSerialized(classifier,
+//					new File(classifiersDir, filename));
+//		} catch (IOException e) {
+//			LegasyErrorReporter.errorMsg("Failed to serialize classifier to file " +
+//					filename + ":");
+//			LegasyErrorReporter.errorMsg(e.toString());
+//			System.exit(1);
+//		}
+//
+//		LegasyErrorReporter.statusMsg("...done.");
+//	}
 	
 	/**
 	 * Loads a serialized classifier for score normalization from a file.
@@ -779,8 +778,8 @@ public class ScoreNormalizationFilter extends Filter {
 			Object o = FileUtils.readSerialized(new File(classifierFilename));
 			classifier = (Classifier) o;
 		} catch (Exception e) {
-			MsgPrinter.printErrorMsg("Failed to load classifier:");
-			MsgPrinter.printErrorMsg(e.toString());
+			LegasyErrorReporter.errorMsg("Failed to load classifier:");
+			LegasyErrorReporter.errorMsg(e.toString());
 		}
 	}
 	

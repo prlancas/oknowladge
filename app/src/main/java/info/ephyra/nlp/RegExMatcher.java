@@ -1,6 +1,6 @@
 package info.ephyra.nlp;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.util.HashDictionary;
 
 import java.io.IOException;
@@ -158,7 +158,7 @@ public class RegExMatcher {
 		try {
 			dictionary = new HashDictionary("./res/nlp/netagger/lists/" + name);
 		} catch (IOException e) {
-			MsgPrinter.printErrorMsg("File not found: " + name);
+			LegasyErrorReporter.errorMsg("File not found: " + name);
 			dictionary = new HashDictionary();
 		}
 		dictionariesByName.put(name, dictionary);

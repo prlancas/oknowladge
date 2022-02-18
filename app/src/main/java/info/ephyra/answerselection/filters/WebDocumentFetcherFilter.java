@@ -1,6 +1,6 @@
 package info.ephyra.answerselection.filters;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.nlp.semantics.Predicate;
 import info.ephyra.querygeneration.Query;
 import info.ephyra.search.Result;
@@ -241,11 +241,11 @@ class WebDocumentFetcher extends Thread {
 				docText = HTMLConverter.url2text(snippet.getDocID());
 				
 				if (docText == null)
-					MsgPrinter.printHttpError("Document " +
+					LegasyErrorReporter.printHttpError("Document " +
 							snippet.getDocID() + " not available.");
 			} catch (SocketTimeoutException e) {
 				docText = null;
-				MsgPrinter.printHttpError("Connection to " +
+				LegasyErrorReporter.printHttpError("Connection to " +
 						snippet.getDocID() + " timed out.");
 			}
 			
@@ -255,7 +255,7 @@ class WebDocumentFetcher extends Thread {
 			if (docText == null && retries < 0 &&
 					snippet.getCacheID() != null &&
 					!snippet.getCacheID().equals(snippet.getDocID())) {
-				MsgPrinter.printErrorMsg("\nCould not fetch original source, " +
+				LegasyErrorReporter.errorMsg("\nCould not fetch original source, " +
 						"trying cached source instead...");
 				snippet.setDocID(snippet.getCacheID());
 				retries = RETRIES;
@@ -270,7 +270,7 @@ class WebDocumentFetcher extends Thread {
 			doc.setScore(0);
 			filter.addDoc(doc, cached);
 		} else {
-			MsgPrinter.printErrorMsg("\nCould not fetch document.");
+			LegasyErrorReporter.errorMsg("\nCould not fetch document.");
 			filter.addDoc(null, cached);
 //			System.exit(1);
 		}

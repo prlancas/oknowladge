@@ -1,6 +1,6 @@
 package info.ephyra.indexing;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.util.FileUtils;
 import info.ephyra.util.HTMLConverter;
 
@@ -31,7 +31,7 @@ public class Blog06Preprocessor {
 	 * @param input corpus file
 	 */
 	private static void convertFile(File input) {
-		MsgPrinter.printStatusMsg("Parsing " + input.getName() + "...");
+		LegasyErrorReporter.statusMsg("Parsing " + input.getName() + "...");
 		
 		// read document
 		ArrayList<String> headers = new ArrayList<String>();
@@ -70,11 +70,11 @@ public class Blog06Preprocessor {
 			
 			if (headers.size() == 0 || contents.size() == 0 ||
 					headers.size() != contents.size()) {
-				MsgPrinter.printErrorMsg(input.getName() + " is malformatted.");
+				LegasyErrorReporter.errorMsg(input.getName() + " is malformatted.");
 				System.exit(1);
 			}
 		} catch (IOException e) {
-			MsgPrinter.printErrorMsg("Could not read from " + input.getName() +
+			LegasyErrorReporter.errorMsg("Could not read from " + input.getName() +
 					".");
 			System.exit(1);
 		}
@@ -83,7 +83,7 @@ public class Blog06Preprocessor {
 		for (int i = 0; i < contents.size(); i++) {
 			String text = HTMLConverter.html2text(contents.get(i));
 			if (text == null) {
-				MsgPrinter.printErrorMsg(input.getName() +
+				LegasyErrorReporter.errorMsg(input.getName() +
 						" could not be parsed.");
 				System.exit(1);
 			}
@@ -114,7 +114,7 @@ public class Blog06Preprocessor {
 			
 			writer.close();
 		} catch (IOException e) {
-			MsgPrinter.printErrorMsg("Could not write to " + output.getName() +
+			LegasyErrorReporter.errorMsg("Could not write to " + output.getName() +
 					".");
 			System.exit(1);
 		}
@@ -127,26 +127,26 @@ public class Blog06Preprocessor {
 	 * 
 	 * @param args argument 1: directory of the Blog06 corpus
 	 */
-	public static void main(String[] args) {
-		if (args.length < 1) {
-			MsgPrinter.printUsage("java Blog06Preprocessor Blog06_directory");
-			System.exit(1);
-		}
-		String dir = args[0];
-		
-		// enable output of status and error messages
-		MsgPrinter.enableStatusMsgs(true);
-		MsgPrinter.enableErrorMsgs(true);
-		
-		// convert all content files in the corpus directory
-		File[] files = FileUtils.getFilesRec(dir);
-		for (File file : files) {
-			String filename = file.getName();
-			// file must not be hidden and must end in "-" followed by a number
-			if (!filename.startsWith(".") && filename.matches(".*?-\\d++"))
-				convertFile(file);
-		}
-		
-		MsgPrinter.printStatusMsg("...done.");
-	}
+//	public static void main(String[] args) {
+//		if (args.length < 1) {
+//			LegasyErrorReporter.printUsage("java Blog06Preprocessor Blog06_directory");
+//			System.exit(1);
+//		}
+//		String dir = args[0];
+//
+//		// enable output of status and error messages
+//		LegasyErrorReporter.enableStatusMsgs(true);
+//		LegasyErrorReporter.enableErrorMsgs(true);
+//
+//		// convert all content files in the corpus directory
+//		File[] files = FileUtils.getFilesRec(dir);
+//		for (File file : files) {
+//			String filename = file.getName();
+//			// file must not be hidden and must end in "-" followed by a number
+//			if (!filename.startsWith(".") && filename.matches(".*?-\\d++"))
+//				convertFile(file);
+//		}
+//
+//		LegasyErrorReporter.statusMsg("...done.");
+//	}
 }

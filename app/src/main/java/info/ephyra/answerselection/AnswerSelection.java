@@ -1,7 +1,7 @@
 package info.ephyra.answerselection;
 
 import info.ephyra.answerselection.filters.Filter;
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.search.Result;
 
 import java.util.ArrayList;
@@ -53,9 +53,9 @@ public class AnswerSelection {
 									  float minScore) {
 		// apply filters
 		for (Filter filter : filters) {
-			MsgPrinter.printFilterStarted(filter, results.length);
+			LegasyErrorReporter.printFilterStarted(filter, results.length);
 			results = filter.apply(results);
-			MsgPrinter.printFilterFinished(filter, results.length);
+			LegasyErrorReporter.printFilterFinished(filter, results.length);
 		}
 		
 		// get up to maxResults results with a score of at least minScore

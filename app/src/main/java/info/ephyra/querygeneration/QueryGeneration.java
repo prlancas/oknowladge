@@ -1,7 +1,7 @@
 package info.ephyra.querygeneration;
 
-import info.ephyra.io.Logger;
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.Logger;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.querygeneration.generators.QueryGenerator;
 import info.ephyra.questionanalysis.AnalyzedQuestion;
 
@@ -53,9 +53,8 @@ public class QueryGeneration {
 		
 		// print and log query strings
 		Query[] queries = results.toArray(new Query[results.size()]);
-		MsgPrinter.printQueryStrings(queries);
-		Logger.logQueryStrings(queries);
-		
+		LegasyErrorReporter.printQueryStrings(queries);
+
 		return queries;
 	}
 }

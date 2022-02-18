@@ -1,6 +1,6 @@
 package info.ephyra.nlp.indices;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.nlp.NETagger;
 import info.ephyra.util.FileUtils;
 
@@ -62,7 +62,7 @@ public class WordFrequencies {
 	 * @return true, iff the index was updated successfully
 	 */
 	public static boolean updateIndexFromFile(String filename) {
-		MsgPrinter.printStatusMsg(filename);
+		LegasyErrorReporter.statusMsg(filename);
 		
 		File file = new File(filename);
 		try {
@@ -309,20 +309,20 @@ public class WordFrequencies {
 	 * @param args argument 1: folder containing text files
 	 * 			   argument 2: output file
 	 */
-	public static void main(String[] args) {
-		if (args.length < 2) {
-			MsgPrinter.printUsage("java WordFrequencies corpus_folder " +
-								  "output_file");
-			System.exit(1);
-		}
-		
-		MsgPrinter.enableStatusMsgs(true);
-		MsgPrinter.printStatusMsg("Building index of word frequencies...");
-		
-		createIndexFromDir(args[0]);
-		dropRareWords();
-		saveIndex(args[1]);
-		
-		MsgPrinter.printStatusMsg("...completed.");
-	}
+//	public static void main(String[] args) {
+//		if (args.length < 2) {
+//			LegasyErrorReporter.printUsage("java WordFrequencies corpus_folder " +
+//								  "output_file");
+//			System.exit(1);
+//		}
+//
+//		LegasyErrorReporter.enableStatusMsgs(true);
+//		LegasyErrorReporter.statusMsg("Building index of word frequencies...");
+//
+//		createIndexFromDir(args[0]);
+//		dropRareWords();
+//		saveIndex(args[1]);
+//
+//		LegasyErrorReporter.statusMsg("...completed.");
+//	}
 }

@@ -1,6 +1,6 @@
 package info.ephyra.answerselection.filters;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.nlp.NETagger;
 import info.ephyra.nlp.SnowballStemmer;
 import info.ephyra.search.searchers.YahooKM;
@@ -64,10 +64,10 @@ public class YahooTermImportanceFilter extends WebTermImportanceFilter {
 				try {
 					searchResults = client.webSearch(request).listResults();
 				} catch (Exception e) {
-					MsgPrinter.printSearchError(e);  // print search error message
+					LegasyErrorReporter.printSearchError(e);  // print search error message
 					
 					if (retries == RETRIES) {
-						MsgPrinter.printErrorMsg("\nSearch failed.");
+						LegasyErrorReporter.errorMsg("\nSearch failed.");
 						System.exit(1);
 					}
 					retries++;

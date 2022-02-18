@@ -1,6 +1,6 @@
 package info.ephyra.indexing;
 
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.util.FileUtils;
 
 import java.io.BufferedReader;
@@ -34,7 +34,7 @@ public class AQUAINTPreprocessor {
 		
 		for (File file : files) {
 			// read file content and modify
-			MsgPrinter.printStatusMsg("Parsing " + file.getName() + "...");
+			LegasyErrorReporter.statusMsg("Parsing " + file.getName() + "...");
 			ArrayList<String> doc = new ArrayList<String>();
 			boolean mod = false;
 			try {
@@ -97,7 +97,7 @@ public class AQUAINTPreprocessor {
 				} catch (IOException e) {
 					return false;
 				}
-				MsgPrinter.printStatusMsg("...modified");
+				LegasyErrorReporter.statusMsg("...modified");
 			}
 		}
 		
@@ -114,7 +114,7 @@ public class AQUAINTPreprocessor {
 		
 		for (File file : files) {
 			// read file content and modify
-			MsgPrinter.printStatusMsg("Parsing " + file.getName() + "...");
+			LegasyErrorReporter.statusMsg("Parsing " + file.getName() + "...");
 			ArrayList<String> doc = new ArrayList<String>();
 			boolean mod = false;
 			try {
@@ -156,7 +156,7 @@ public class AQUAINTPreprocessor {
 				} catch (IOException e) {
 					return false;
 				}
-				MsgPrinter.printStatusMsg("...modified");
+				LegasyErrorReporter.statusMsg("...modified");
 			}
 		}
 		
@@ -170,33 +170,33 @@ public class AQUAINTPreprocessor {
 	 * 
 	 * @param args argument 1: directory of the AQUAINT corpus
 	 */
-	public static void main(String[] args) {
-		if (args.length < 1) {
-			MsgPrinter.printUsage("java AQUAINTPreprocessor AQUAINT_directory");
-			System.exit(1);
-		}
-		dir = args[0];
-		
-		// enable output of status and error messages
-		MsgPrinter.enableStatusMsgs(true);
-		MsgPrinter.enableErrorMsgs(true);
-		
-		// add paragraph tags if missing
-		MsgPrinter.printStatusMsg("Adding paragraph tags...");
-		if (addParagraphTags())
-			MsgPrinter.printStatusMsg("Paragraph tags added successfully.");
-		else {
-			MsgPrinter.printErrorMsg("Could not add paragraph tags.");
-			System.exit(1);
-		}
-		
-		// split paragraphs
-		MsgPrinter.printStatusMsg("Splitting paragraphs...");
-		if (splitParagraphs())
-			MsgPrinter.printStatusMsg("Paragraphs splitted successfully.");
-		else {
-			MsgPrinter.printErrorMsg("Could not split paragraphs.");
-			System.exit(1);
-		}
-	}
+//	public static void main(String[] args) {
+//		if (args.length < 1) {
+//			LegasyErrorReporter.printUsage("java AQUAINTPreprocessor AQUAINT_directory");
+//			System.exit(1);
+//		}
+//		dir = args[0];
+//
+//		// enable output of status and error messages
+//		LegasyErrorReporter.enableStatusMsgs(true);
+//		LegasyErrorReporter.enableErrorMsgs(true);
+//
+//		// add paragraph tags if missing
+//		LegasyErrorReporter.statusMsg("Adding paragraph tags...");
+//		if (addParagraphTags())
+//			LegasyErrorReporter.statusMsg("Paragraph tags added successfully.");
+//		else {
+//			LegasyErrorReporter.errorMsg("Could not add paragraph tags.");
+//			System.exit(1);
+//		}
+//
+//		// split paragraphs
+//		LegasyErrorReporter.statusMsg("Splitting paragraphs...");
+//		if (splitParagraphs())
+//			LegasyErrorReporter.statusMsg("Paragraphs splitted successfully.");
+//		else {
+//			LegasyErrorReporter.errorMsg("Could not split paragraphs.");
+//			System.exit(1);
+//		}
+//	}
 }

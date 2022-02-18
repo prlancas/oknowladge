@@ -1,7 +1,7 @@
 package info.ephyra.questionanalysis;
 
-import info.ephyra.io.Logger;
-import info.ephyra.io.MsgPrinter;
+import com.prlancas.oknowledge.io.Logger;
+import com.prlancas.oknowledge.io.LegasyErrorReporter;
 import info.ephyra.nlp.indices.WordFrequencies;
 import info.ephyra.nlp.semantics.Predicate;
 import info.ephyra.nlp.semantics.ontologies.Ontology;
@@ -204,8 +204,8 @@ public class QuestionAnalysis {
 		
 		// stem verbs and nouns
 		String stemmed = QuestionNormalizer.stemVerbsAndNouns(qn);
-		MsgPrinter.printNormalization(stemmed);
-		Logger.logNormalization(stemmed);
+		LegasyErrorReporter.printNormalization(stemmed);
+
 		
 		// resolve verb constructions with auxiliaries
 		String verbMod = (QuestionNormalizer.handleAuxiliaries(qn))[0];
@@ -229,21 +229,18 @@ public class QuestionAnalysis {
 		// determine answer types
 		//String[] ats = AnswerTypeTester.getAnswerTypes(qn, stemmed);
         String[] ats = getAtypes(question);
-		MsgPrinter.printAnswerTypes(ats);
-		Logger.logAnswerTypes(ats);
-		
+		LegasyErrorReporter.printAnswerTypes(ats);
+
 		// interpret question
 		QuestionInterpretation[] qis =
 			QuestionInterpreter.interpret(qn, stemmed);
-		MsgPrinter.printInterpretations(qis);
-		Logger.logInterpretations(qis);
-		
+		LegasyErrorReporter.printInterpretations(qis);
+
 		// extract predicates
 		Predicate[] ps = (predicates != null) ? predicates
 				: PredicateExtractor.getPredicates(qn, verbMod, ats, terms);
-		MsgPrinter.printPredicates(ps);
-		Logger.logPredicates(ps);
-		
+		LegasyErrorReporter.printPredicates(ps);
+
 		// expand terms
 		TermExpander.expandTerms(terms, ps,
 				ontologies.toArray(new Ontology[ontologies.size()]));
