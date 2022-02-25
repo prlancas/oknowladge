@@ -248,13 +248,4 @@ public class QuestionAnalysis {
 		return new AnalyzedQuestion(question, qn, stemmed, verbMod, kws, nes,
 				terms, focus, ats, qis, ps);
 	}
-    
-    public static void main (String[] args) {
-        String[] atypes = getAtypes(args[0]);
-        System.out.println(args[0]);
-        for (String atype : atypes) {
-            System.out.println(atype);
-        }
-        System.out.println("Done!");
-    }
 }

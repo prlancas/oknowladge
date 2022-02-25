@@ -27,8 +27,8 @@ import java.text.SimpleDateFormat
  * @version 2007-07-14
  */
 class IOCommandLine(
-    var statusMsgs: Boolean = false,
-    var errorMsgs: Boolean = false
+    var statusMsgs: Boolean = true,
+    var errorMsgs: Boolean = true
 ) : IOInterface {
 
     /**

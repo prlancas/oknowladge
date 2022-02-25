@@ -1,5 +1,6 @@
 package com.prlancas.oknowledge
 
+import com.prlancas.oknowledge.intent.Intent
 import com.prlancas.oknowledge.io.IOInterface
 import com.prlancas.oknowledge.io.IOCommandLine
 import com.prlancas.oknowledge.io.LegasyErrorReporter
@@ -42,10 +43,10 @@ import com.prlancas.oknowledge.io.Logger
 import info.ephyra.questionanalysis.AnalyzedQuestion
 import info.ephyra.questionanalysis.QuestionNormalizer
 import info.ephyra.search.Result
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
+import kotlinx.cli.ArgParser
+import kotlinx.cli.ArgType
 import java.lang.Exception
+import kotlin.system.exitProcess
 
 open class OpenKnowledge(
     val dir: String = "",
@@ -188,10 +189,7 @@ open class OpenKnowledge(
         ) ioInterface.errorMsg("Could not load answer patterns.")
     }
 
-    /**
-     * Initializes the pipeline for factoid questions.
-     */
-    protected fun initFactoid() {
+    private fun initPipeline() {
         // question analysis
         val wordNet: Ontology = WordNet()
         // - dictionaries for term extraction
@@ -285,105 +283,49 @@ open class OpenKnowledge(
             // query user for question, quit if user types in "exit"
             ioInterface.questionPrompt()
             var question = ioInterface.getLine().trim { it <= ' ' }
-            if (question.equals("exit", ignoreCase = true)) System.exit(0)
+            if (question.equals("exit", ignoreCase = true))
+                exitProcess(0)
 
-            // determine question type and extract question string
-            var type: String
-            if (question.matches(Regex("(?i)$FACTOID:.*+"))) {
-                // factoid question
-                type = FACTOID
-                question = question.split(":".toRegex(), 2).toTypedArray()[1].trim { it <= ' ' }
-            } else if (question.matches(Regex("(?i)$LIST:.*+"))) {
-                // list question
-                type = LIST
-                question = question.split(":".toRegex(), 2).toTypedArray()[1].trim { it <= ' ' }
-            } else {
-                // question type unspecified
-                type = FACTOID // default type
-            }
-
-            // ask question
-            ioInterface.printAnswers(if (type == FACTOID) {
-                askFactoid(
-                    question, FACTOID_MAX_ANSWERS,
-                    FACTOID_ABS_THRESH
-                ).also {
-                    logger.logFactoidStart(question)
-                    logger.logResults(it)
-                    logger.logFactoidEnd()
-                }
-            } else {
-                askList(question, LIST_REL_THRESH).also {
-                    logger.logListStart(question)
-                    logger.logResults(it)
-                    logger.logListEnd()
-                }
-            })
+            reply(question)
         }
     }
 
-    /**
-     * Asks Ephyra a factoid question and returns up to `maxAnswers`
-     * results that have a score of at least `absThresh`.
-     *
-     * @param question factoid question
-     * @param maxAnswers maximum number of answers
-     * @param absThresh absolute threshold for scores
-     * @return array of results
-     */
-    open fun askFactoid(
-        question: String, maxAnswers: Int,
-        absThresh: Float
-    ): List<Result> {
-        // initialize pipeline
-        initFactoid()
+    fun reply(sentance: String) {
+        initPipeline()
+        val results: List<Result> = when (getSentanceType(sentance)){
+            Intent.QUESTION -> processQuestion(sentance)
+            Intent.GREETING -> processGreeting(sentance)
+            Intent.INFORMATION -> processInformation(sentance)
+        }
+        results.forEach() {
+            println(it)
+        }
+    }
 
-        // analyze question
+    private fun processInformation(sentance: String): List<Result> =
+        listOf(Result("Thanks for the information"))
+
+    private fun processGreeting(sentance: String): List<Result> = listOf(Result("Hello"))
+
+    private fun processQuestion(sentance: String): List<Result> {
+        return listOf(Result("OK"))
+//        return runPipeline(aq, maxAnswers, absThresh)(
+//            sentance, FACTOID_MAX_ANSWERS,
+//            FACTOID_ABS_THRESH
+//        ).also {
+//            logger.logFactoidStart(sentance)
+//            logger.logResults(it)
+//            logger.logFactoidEnd()
+//        }
+    }
+
+    private fun getSentanceType(sentance: String): Intent {
         ioInterface.printAnalyzingQuestion()
-        val aq = QuestionAnalysis.analyze(question)
-
-        // get answers
-        return runPipeline(aq, maxAnswers, absThresh)
-    }
-
-    /**
-     * Asks Ephyra a factoid question and returns a single result or
-     * `null` if no answer could be found.
-     *
-     * @param question factoid question
-     * @return single result or `null`
-     */
-    fun askFactoid(question: String) =
-        askFactoid(question, 1, 0f).firstOrNull()
-
-    /**
-     * Asks Ephyra a list question and returns results that have a score of at
-     * least `relThresh * top score`.
-     *
-     * @param question list question
-     * @param relThresh relative threshold for scores
-     * @return array of results
-     */
-    open fun askList(question: String?, relThresh: Float): List<Result> {
-
-        val results = askFactoid(QuestionNormalizer.transformList(question), Int.MAX_VALUE, 0f)
-
-        // get results with a score of at least relThresh * top score
-        return if (results.isNotEmpty()) {
-            val topScore = results[0].score
-            return results.filter { result -> result.score >= relThresh * topScore}
-        } else {
-            emptyList()
-        }
+        val aq = QuestionAnalysis.analyze(sentance)
+        return Intent.QUESTION
     }
 
     companion object {
-        /** Factoid question type.  */
-        protected const val FACTOID = "FACTOID"
-
-        /** List question type.  */
-        protected const val LIST = "LIST"
-
         /** Maximum number of factoid answers.  */
         protected const val FACTOID_MAX_ANSWERS = 1
 
@@ -403,6 +345,17 @@ open class OpenKnowledge(
     }
 }
 
-fun main() {
-    OpenKnowledge().startChitChat()
+fun main(args: Array<String>) {
+    val parser = ArgParser("oknowledge")
+    val debugs by parser.option(ArgType.Boolean, shortName = "d", fullName = "debug", description = "Debugs")
+    val logging by parser.option(ArgType.Boolean, shortName = "l", fullName = "logging", description = "Log to file")
+    val question by parser.option(ArgType.String, shortName = "q", fullName = "question", description = "Question to ask")
+
+    parser.parse(args)
+
+    val openKnowledge = OpenKnowledge(ioInterface = IOCommandLine(statusMsgs = (debugs == true)))
+    question?.let {openKnowledge.reply(it)}
+
+    if (question == null)
+        openKnowledge.startChitChat()
 }
